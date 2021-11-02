@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                 child: ListTile(
                     leading: Text(_journals[index]['name']),
                     title: Text(_journals[index]['title']),
-                    subtitle: Text(_journals[index]['description']),
+                    subtitle: Text(_journals[index]['remarks']),
                     trailing: SizedBox(
                       width: 100,
                       child: Row(
