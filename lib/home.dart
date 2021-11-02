@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqlite_flutter/sqlHelper.dart';
+import 'sqlHelper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,9 +29,12 @@ class _HomePageState extends State<HomePage> {
     _refreshJournals(); // Loading the diary when the app starts
   }
 
-  TextEditingController _nameController = new TextEditingController();
-  TextEditingController _titleController = new TextEditingController();
-  TextEditingController _remarksController = new TextEditingController();
+  //TextEditingController _nameController = new TextEditingController();
+  //TextEditingController _titleController = new TextEditingController();
+  //TextEditingController _remarksController = new TextEditingController();
+  final _nameController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _remarksController = TextEditingController();
 
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when you want to update an item
@@ -49,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         context: context,
         elevation: 5,
         builder: (_) => Container(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               width: double.infinity,
               height: 300,
               child: Column(
@@ -57,23 +61,23 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   TextField(
                     controller: _nameController,
-                    decoration: InputDecoration(hintText: 'Name'),
+                    decoration: const InputDecoration(hintText: 'Name'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextField(
                     controller: _titleController,
-                    decoration: InputDecoration(hintText: 'Title'),
+                    decoration: const InputDecoration(hintText: 'Title'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextField(
                     controller: _remarksController,
-                    decoration: InputDecoration(hintText: 'Remarks'),
+                    decoration: const InputDecoration(hintText: 'Remarks'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
@@ -102,12 +106,12 @@ class _HomePageState extends State<HomePage> {
             ));
   }
 
-  // Insert a new journal to the database insert datatbase
+  // Insert a new journal to the database
   Future<void> _addNote() async {
     await SQLHelper.createNote(
         _nameController.text, _titleController.text, _remarksController.text);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Successfully Added Note!'),
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Successfully Added a Note!'),
     ));
     _refreshJournals();
   }
@@ -122,8 +126,8 @@ class _HomePageState extends State<HomePage> {
   // Delete an item
   void _deleteItem(int id) async {
     await SQLHelper.deleteNotes(id);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Successfully deleted a journal!'),
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Successfully deleted a Note!'),
     ));
     _refreshJournals();
   }
@@ -132,17 +136,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sqflite'),
+        title: const Center(
+          child: Text('LuChat Notebook'),
+        ),
       ),
       body: _isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
               itemCount: _journals.length,
               itemBuilder: (context, index) => Card(
                 color: Colors.orange[200],
-                margin: EdgeInsets.all(15),
+                margin: const EdgeInsets.all(15),
                 child: ListTile(
                     leading: Text(_journals[index]['name']),
                     title: Text(_journals[index]['title']),
@@ -152,11 +158,11 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             onPressed: () => _showForm(_journals[index]['id']),
                           ),
                           IconButton(
-                            icon: Icon(Icons.delete),
+                            icon: const Icon(Icons.delete),
                             onPressed: () =>
                                 _deleteItem(_journals[index]['id']),
                           ),
@@ -166,7 +172,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => _showForm(null),
       ),
     );
